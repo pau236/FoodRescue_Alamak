@@ -8,6 +8,9 @@ const connectDB = async () => {
     console.error("❌ Database Connection Failed:", err.message);
     process.exit(1);
   }
+  
+  console.log("URI:", process.env.MONGO_URI)
 };
+
 
 export default connectDB;

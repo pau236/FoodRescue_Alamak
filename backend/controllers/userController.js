@@ -1,4 +1,4 @@
-import Users from "../../database/Users";
+import Users from "../models/Users.js";
 import bcrypt from "bcrypt";
 
 export const register = async (req, res) => {
@@ -15,18 +15,8 @@ export const register = async (req, res) => {
         }
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const user = new Users({
-            NIK: req.body.NIK,
-            full_name: req.body.full_name,
-            email: email,
-            username: req.body.username,
-            password: hashedPassword,
-            address: req.body.address,
-            birthdate: req.body.birthdate,
-            current_employment: req.body.current_employment,
-            salary: req.body.salary,
-            marriage_status: req.body.marriage_status,
-            created_at: new Date(),
-            updated_at: new Date()
+                "email": req.body.email,
+                "password": hashedPassword
             });
         await user.save();
 
@@ -45,19 +35,24 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        if (!req.body.email || !req.body.password) {
+        if (!req.body.user || !req.body.password) {
             return res.status(400).json({
                 message: "Email dan password wajib diisi"
             });
         }
-        const email = req.body.email.trim().toLowerCase();
-        const user = await Users.findOne({email: email});
+        const user = await Users.findOne({
+                                            $or: [
+                                                { email: req.body.user },
+                                                { username: req.body.user }
+                                            ]
+                                        }).select("+password");
         if (!user) {
             return res.status(404).json({
                 message: "User tidak ditemukan"
             });
         }
-        const isMatch = await bcrypt.compare(req.body.password, user.password);
+
+        const isMatch = await user.compare(req.body.password, user.password);
         if (!isMatch) {
             return res.status(400).json({
                 message: "Password salah"
