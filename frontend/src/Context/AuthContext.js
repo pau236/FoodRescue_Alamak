@@ -1,21 +1,30 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import api from '../utils/api';
+import { createContext, useContext, useState, useEffect } from "react";
+import api from "../utils/api";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const storedUser =
+    JSON.parse(localStorage.getItem("user")) ||
+    JSON.parse(sessionStorage.getItem("user"));
+
+  const [user, setUser] = useState(storedUser);
+  const [token, setToken] = useState(
+    localStorage.getItem("token") || sessionStorage.getItem("token"),
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       if (token) {
         try {
-          const res = await api.get('/auth/me');
+          const res = await api.get("/auth/me");
           setUser(res.data);
         } catch {
-          localStorage.removeItem('token');
+          localStorage.removeItem("token");
+          sessionStorage.removeItem("token");
+          localStorage.removeItem("user");
+          sessionStorage.removeItem("user");
           setToken(null);
         }
       }
@@ -24,14 +33,25 @@ export const AuthProvider = ({ children }) => {
     fetchUser();
   }, [token]);
 
-  const login = (newToken, userData) => {
-    localStorage.setItem('token', newToken);
+  const login = (newToken, userData, rememberMe) => {
+    if (rememberMe) {
+      localStorage.setItem("token", newToken);
+      localStorage.setItem("user", JSON.stringify(userData));
+    } else {
+      sessionStorage.setItem("token", newToken);
+      sessionStorage.setItem("user", JSON.stringify(userData));
+    }
+
     setToken(newToken);
     setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
+
     setToken(null);
     setUser(null);
   };

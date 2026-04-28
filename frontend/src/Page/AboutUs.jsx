@@ -112,7 +112,7 @@ const impactStatsData = [
   { number: "2,481", label: "Total Donasi" },
   { number: "8,200+", label: "Penerima Terbantu" },
   { number: "12T kg", label: "Makanan Diselamatkan" },
-  { number: "~30T kg", label: "CO2 Dihemat" },
+  { number: "30T kg", label: "CO2 Dihemat" },
   { number: "800+", label: "Relawan Aktif" },
   { number: "42", label: "Kota Terjangkau" },
 ];

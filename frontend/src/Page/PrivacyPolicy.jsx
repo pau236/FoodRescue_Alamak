@@ -1541,9 +1541,6 @@ class PrivacyPolicy extends Component {
                     >
                       <i className="bi bi-envelope" /> Hubungi Kami
                     </button>
-                    <button className="faq-help-box__btn-secondary outfit">
-                      <i className="bi bi-download" /> Unduh PDF
-                    </button>
                   </div>
                 </div>
               </div>

@@ -19,6 +19,7 @@ class SignInPage extends React.Component {
       passwordTouched: false,
       showPassword: false,
       redirect: false,
+      rememberMe: false,
     };
   }
 
@@ -108,8 +109,7 @@ class SignInPage extends React.Component {
         password,
       });
 
-      // Pake login dari AuthContext biar navbar langsung update tanpa refresh
-      this.context.login(res.data.token, res.data.user);
+      this.context.login(res.data.token, res.data.user, this.state.rememberMe);
       this.setState({ redirect: true });
     } catch (err) {
       console.log("LOGIN ERROR:", err.response || err);
@@ -129,7 +129,7 @@ class SignInPage extends React.Component {
 
   render() {
     if (this.state.redirect) {
-      return <Navigate to="/" />;
+      return <Navigate to="/home" />;
     }
     return (
       <>
@@ -266,6 +266,10 @@ class SignInPage extends React.Component {
                     type="checkbox"
                     value=""
                     id="checkDefault"
+                    checked={this.state.rememberMe}
+                    onChange={(e) =>
+                      this.setState({ rememberMe: e.target.checked })
+                    }
                   />
                   <label
                     className="form-check-label outfit text-green3"

@@ -87,7 +87,7 @@ router.post("/send-otp", async (req, res) => {
                   <td style="vertical-align:middle;padding-right:12px;">
                     <div style="width:52px;height:52px;background:rgba(255,255,255,0.95);border-radius:14px;display:inline-block;text-align:center;line-height:52px;box-shadow:0 4px 16px rgba(0,0,0,0.15);">
                       <img
-                        src="https://i.imgur.com/A0DGIrz.png"
+                        src="https://res.cloudinary.com/dt7qzcics/image/upload/v1777415977/foodrescue_logo_only_w3uqez.png"
                         alt="FoodRescue"
                         width="36"
                         height="36"
