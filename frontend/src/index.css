@@ -1689,3 +1689,24 @@ input[type="file"]::file-selector-button:hover {
   background-color: var(--g5) !important;
   color: var(--txt) !important;
 }
+
+.sosmed-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surf2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--txt3);
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.sosmed-btn:hover {
+  border-color: var(--g2);
+  color: var(--g1);
+  background: var(--g5);
+}

@@ -4,7 +4,6 @@ import { AuthProvider, useAuth } from "./Context/AuthContext";
 import "./index.css";
 import "leaflet/dist/leaflet.css";
 
-// FIXED IMPORT
 import SignInPage from "./Page/SignInPage";
 import RegisterPage from "./Page/RegisterPage";
 import Donations from "./Page/Donations";
@@ -25,7 +24,6 @@ import PrivacyPolicy from "./Page/PrivacyPolicy";
 import MainLayout from "./Layout/MainLayout";
 import LandingPage from "./Page/LandingPage";
 
-// Route yang butuh login
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading)
@@ -37,7 +35,6 @@ function PrivateRoute({ children }) {
   return user ? children : <Navigate to="/login" />;
 }
 
-// Route khusus admin
 function AdminRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading)
@@ -49,7 +46,6 @@ function AdminRoute({ children }) {
   return user?.role === "admin" ? children : <Navigate to="/" />;
 }
 
-// Route khusus food_provider
 function ProviderRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading)
@@ -73,8 +69,8 @@ function AppRoutes() {
           <Route index element={<LandingPage />} />
           <Route path="home" element={<Home />} />
           <Route path="donations" element={<Donations />} />
-          <Route path="donations/:id" element={<DonationDetail />} />
 
+          {/* ✅ create HARUS sebelum :id */}
           <Route
             path="donations/create"
             element={
@@ -85,6 +81,9 @@ function AppRoutes() {
               </PrivateRoute>
             }
           />
+
+          <Route path="donations/:id" element={<DonationDetail />} />
+
           <Route
             path="profile"
             element={

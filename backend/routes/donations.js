@@ -4,7 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const Donation = require('../models/Donation');
 const FoodCategory = require('../models/FoodCategory');
-const { auth } = require('../middleware/auth');
+const { auth, requireRole } = require('../middleware/auth');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
@@ -67,8 +67,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/donations
-router.post('/', auth, (req, res, next) => {
+// POST /api/donations — hanya food_provider & admin
+router.post('/', auth, requireRole('food_provider', 'admin'), (req, res, next) => {
   upload.array('photos', 5)(req, res, (err) => {
     if (err) {
       return res.status(400).json({ msg: err.message, field: err.field });
@@ -127,8 +127,8 @@ router.post('/', auth, (req, res, next) => {
   }
 });
 
-// PUT /api/donations/:id
-router.put('/:id', auth, async (req, res) => {
+// PUT /api/donations/:id — hanya food_provider & admin
+router.put('/:id', auth, requireRole('food_provider', 'admin'), async (req, res) => {
   try {
     const donation = await Donation.findById(req.params.id);
     if (!donation) return res.status(404).json({ msg: 'Donasi tidak ditemukan' });
@@ -148,8 +148,8 @@ router.put('/:id', auth, async (req, res) => {
   }
 });
 
-// DELETE /api/donations/:id
-router.delete('/:id', auth, async (req, res) => {
+// DELETE /api/donations/:id — hanya food_provider & admin
+router.delete('/:id', auth, requireRole('food_provider', 'admin'), async (req, res) => {
   try {
     const donation = await Donation.findById(req.params.id);
     if (!donation) return res.status(404).json({ msg: 'Donasi tidak ditemukan' });

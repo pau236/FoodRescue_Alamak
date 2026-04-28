@@ -22,4 +22,18 @@ const adminAuth = (req, res, next) => {
   });
 };
 
-module.exports = { auth, protect: auth, adminAuth };
+// Middleware reusable untuk cek role
+// Contoh pemakaian: requireRole('food_provider', 'admin')
+const requireRole = (...roles) => (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ msg: 'Token tidak ada, akses ditolak' });
+  }
+  if (!roles.includes(req.user.role)) {
+    return res.status(403).json({
+      msg: `Akses ditolak. Role yang diizinkan: ${roles.join(', ')}`
+    });
+  }
+  next();
+};
+
+module.exports = { auth, protect: auth, adminAuth, requireRole };

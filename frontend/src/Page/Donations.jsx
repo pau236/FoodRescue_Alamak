@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import api from '../utils/api';
 import MapView from '../Component/MapView';
-import BadgeGreen from '../Component/BadgeGreen';
 
 function Donations() {
   const [donations, setDonations] = useState([]);
@@ -83,6 +82,7 @@ function Donations() {
     tryGetLocation();
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchDonations(); }, [filter]);
 
   // Filter by radius
@@ -132,7 +132,7 @@ const filteredDonations = donations.filter(d => {
     <div className="container-fluid py-4">
       <div className="row g-0 outfit">
         {/* Kiri — Peta */}
-        <div className="col-md-5 pe-3 d-flex flex-column" style={{ height: 'calc(100vh - 80px)' }}>
+        <div className="col-md-5 pe-3 d-flex flex-column" style={{ height: 'calc(100vh - 84px)' }}>
           <h5 className="text-green1 syne-h1 mb-2">
             <i className="bi bi-map me-2"></i>Peta Donasi
           </h5>
@@ -223,7 +223,7 @@ const filteredDonations = donations.filter(d => {
         </div>
 
         {/* Kanan — Filter + List */}
-        <div className="col-md-7 mt-3 mt-md-0" style={{ overflowY: 'auto', overflowX:'auto', height: 'calc(100vh - 80px)' }}>
+        <div className="col-md-7 mt-3 mt-md-0" style={{ overflowY: 'auto', overflowX:'auto', height: 'calc(100vh - 84px)' }}>
           <h5 className="mb-2 text-green1 syne-h1">
             <i className="bi bi-basket2 me-2"></i>
             Donasi Tersedia
