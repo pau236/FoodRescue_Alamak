@@ -1,41 +1,111 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import api from '../utils/api';
-import MapPicker from '../Component/MapPicker';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import api from "../utils/api";
+import MapPicker from "../Component/MapPicker";
+
+const inputStyle = {
+  width: "100%",
+  borderRadius: 10,
+  border: "1px solid var(--border)",
+  padding: "9px 12px",
+  fontSize: 13,
+  fontFamily: "inherit",
+  background: "var(--g5)",
+  outline: "none",
+  boxSizing: "border-box",
+  color: "var(--txt)",
+};
+
+function Label({ children, required }) {
+  return (
+    <label
+      style={{
+        fontSize: 12,
+        fontWeight: 700,
+        color: "var(--txt3)",
+        letterSpacing: "0.03em",
+        marginBottom: 6,
+        display: "block",
+      }}
+    >
+      {children} {required && <span style={{ color: "#e05050" }}>*</span>}
+    </label>
+  );
+}
+
+function SectionTitle({ icon, title }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        marginBottom: 18,
+        paddingBottom: 12,
+        borderBottom: "1px solid var(--border)",
+      }}
+    >
+      <div
+        style={{
+          width: 34,
+          height: 34,
+          borderRadius: 10,
+          background: "rgba(95,139,76,0.12)",
+          border: "1px solid rgba(95,139,76,0.25)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <i
+          className={`bi ${icon}`}
+          style={{ color: "var(--g2)", fontSize: 15 }}
+        />
+      </div>
+      <span
+        className="syne-h1"
+        style={{ fontSize: 14, color: "var(--txt)", letterSpacing: "0.01em" }}
+      >
+        {title}
+      </span>
+    </div>
+  );
+}
 
 function CreateDonation() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState('');
+  const [msg, setMsg] = useState("");
   const [photos, setPhotos] = useState([]);
   const [coords, setCoords] = useState({ lat: 3.5952, lng: 98.6722 });
   const [form, setForm] = useState({
-    title: '',
-    description: '',
-    category_id: '',
-    quantity: '',
-    quantity_unit: '',
-    pickup_address: '',
-    pickup_city: '',
-    pickup_notes: '',
-    pickup_start_time: '',
-    pickup_end_time: '',
-    expired_at: '',
-    is_halal: '',
-    allergen_notes: '',
+    title: "",
+    description: "",
+    category_id: "",
+    quantity: "",
+    quantity_unit: "",
+    pickup_address: "",
+    pickup_city: "",
+    pickup_notes: "",
+    pickup_start_time: "",
+    pickup_end_time: "",
+    expired_at: "",
+    is_halal: "",
+    allergen_notes: "",
   });
 
   useEffect(() => {
-    api.get('/categories').then(res => setCategories(res.data));
+    api.get("/categories").then((res) => setCategories(res.data));
   }, []);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handlePhotoChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 5) {
-      setMsg('❌ Maksimal 5 foto');
+      setMsg("error:Maksimal 5 foto");
       return;
     }
     setPhotos(files);
@@ -44,60 +114,196 @@ function CreateDonation() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMsg('');
+    setMsg("");
     try {
       const formData = new FormData();
       Object.entries(form).forEach(([k, v]) => {
-        if (v !== '') formData.append(k, v);
+        if (v !== "") formData.append(k, v);
       });
-      formData.append('latitude', coords.lat);
-      formData.append('longitude', coords.lng);
-      photos.forEach(p => formData.append('photos', p));
-
-      await api.post('/donations', formData);
-      setMsg('✅ Donasi berhasil dibuat!');
-      setTimeout(() => navigate('/donations'), 1500);
+      formData.append("latitude", coords.lat);
+      formData.append("longitude", coords.lng);
+      photos.forEach((p) => formData.append("photos", p));
+      await api.post("/donations", formData);
+      setMsg("success");
+      setTimeout(() => navigate("/donations"), 1500);
     } catch (err) {
-      setMsg('❌ ' + (err.response?.data?.msg || 'Gagal membuat donasi'));
+      setMsg("error:" + (err.response?.data?.msg || "Gagal membuat donasi"));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="container py-4">
-      <div className="row justify-content-center">
-        <div className="col-md-8">
-          <div className="card p-4" style={{backgroundColor:" var(--surface)", border: "1px solid var(--border)", boxShadow:"var(--shadow)",maxWidth: "900px"}}>
-            <h4 className="text-green1 syne-h1 mb-4">
-              <i className="bi bi-plus-circle me-2"></i>Buat Donasi Baru
+    <div
+      className="outfit"
+      style={{ background: "var(--bg)", minHeight: "100vh" }}
+    >
+      {/* Header */}
+      <div
+        style={{
+          background: "var(--surf2)",
+          borderBottom: "1px solid var(--border)",
+          padding: "20px 24px 16px",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          className="grid-detail-responsive"
+          style={{ position: "absolute", inset: 0, borderRadius: 0 }}
+        />
+        <div
+          style={{
+            position: "relative",
+            zIndex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div className="d-flex align-items-center gap-2">
+            <i
+              className="bi-plus-circle"
+              style={{
+                fontSize: 35,
+                color: "var(--g1)",
+                lineHeight: 1,
+              }}
+            />
+
+            <h4
+              className="syne-h1 mb-0"
+              style={{
+                color: "var(--txt)",
+                fontSize: 22,
+                lineHeight: 1,
+              }}
+            >
+              Buat Donasi Baru
             </h4>
+          </div>
+          <button
+            onClick={() => navigate(-1)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 7,
+              padding: "8px 16px",
+              borderRadius: 10,
+              border: "1px solid var(--border)",
+              background: "var(--surface)",
+              color: "var(--txt3)",
+              fontSize: 13,
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            <i className="bi bi-arrow-left" style={{ fontSize: 14 }} /> Kembali
+          </button>
+        </div>
+      </div>
 
-            {msg && <div className="alert alert-info">{msg}</div>}
+      {/* Toast */}
+      {msg === "success" && (
+        <div style={{ margin: "16px auto", maxWidth: 820, padding: "0 20px" }}>
+          <div
+            style={{
+              background: "rgba(95,139,76,0.12)",
+              border: "1px solid rgba(95,139,76,0.3)",
+              borderRadius: 12,
+              padding: "12px 16px",
+              color: "var(--g2)",
+              fontSize: 13,
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <i className="bi bi-check-circle-fill" /> Donasi berhasil dibuat!
+            Mengalihkan...
+          </div>
+        </div>
+      )}
+      {msg.startsWith("error:") && (
+        <div style={{ margin: "16px auto", maxWidth: 820, padding: "0 20px" }}>
+          <div
+            style={{
+              background: "rgba(224,80,80,0.1)",
+              border: "1px solid rgba(224,80,80,0.3)",
+              borderRadius: 12,
+              padding: "12px 16px",
+              color: "#e05050",
+              fontSize: 13,
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <i className="bi bi-exclamation-circle-fill" />{" "}
+            {msg.replace("error:", "")}
+          </div>
+        </div>
+      )}
 
-            <form onSubmit={handleSubmit} className='outfit text-green2'>
-              <h6 className="fw-bold text-green2 mb-3">📋 Informasi Donasi</h6>
+      {/* Form */}
+      <div
+        style={{ maxWidth: 820, margin: "0 auto", padding: "24px 20px 48px" }}
+      >
+        <form onSubmit={handleSubmit}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {/* ── Informasi Donasi ── */}
+            <div
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: 16,
+                padding: "20px",
+                boxShadow: "var(--shadow)",
+              }}
+            >
+              <SectionTitle icon="bi-basket2" title="Informasi Donasi" />
 
-              <div className="mb-3">
-                <label className="form-label">Judul Donasi <span className="text-danger">*</span></label>
-                <input type="text" name="title" className="form-control input-green"
-                  value={form.title} onChange={handleChange} required
-                  placeholder="cth: Nasi Kotak Sisa Acara" />
+              <div style={{ marginBottom: 14 }}>
+                <Label required>Judul Donasi</Label>
+                <input
+                  className="input-green"
+                  type="text"
+                  name="title"
+                  value={form.title}
+                  onChange={handleChange}
+                  required
+                  placeholder="cth: Nasi Kotak Sisa Acara"
+                  style={{ ...inputStyle }}
+                />
               </div>
 
-              <div className="mb-3">
-                <label className="form-label">Deskripsi</label>
-                <textarea name="description" className="form-control input-green" rows={3}
-                  value={form.description} onChange={handleChange}
-                  placeholder="Jelaskan kondisi makanan, isi, dll..." />
+              <div style={{ marginBottom: 14 }}>
+                <Label>Deskripsi</Label>
+                <textarea
+                  className="input-green"
+                  name="description"
+                  rows={3}
+                  value={form.description}
+                  onChange={handleChange}
+                  placeholder="Jelaskan kondisi makanan, isi, dll..."
+                  style={{ ...inputStyle, resize: "vertical" }}
+                />
               </div>
 
-              <div className="mb-3">
-                <label className="form-label">Kategori <span className="text-danger">*</span></label>
-                <select name="category_id" className="form-select input-green"
-                  value={form.category_id} onChange={handleChange} required>
+              <div style={{ marginBottom: 14 }}>
+                <Label required>Kategori</Label>
+                <select
+                  className="input-green"
+                  name="category_id"
+                  value={form.category_id}
+                  onChange={handleChange}
+                  required
+                  style={{ ...inputStyle }}
+                >
                   <option value="">Pilih kategori...</option>
-                  {categories.map(c => (
+                  {categories.map((c) => (
                     <option key={c._id} value={c._id}>
                       {c.icon_emoji} {c.name}
                     </option>
@@ -105,132 +311,384 @@ function CreateDonation() {
                 </select>
               </div>
 
-              <div className="row g-3 mb-3">
-                <div className="col-6">
-                  <label className="form-label">Jumlah <span className="text-danger">*</span></label>
-                  <input type="number" name="quantity" className="form-control input-green"
-                    value={form.quantity} onChange={handleChange} required min={1}
-                    placeholder="cth: 10" />
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 12,
+                  marginBottom: 14,
+                }}
+              >
+                <div>
+                  <Label required>Jumlah</Label>
+                  <input
+                    className="input-green"
+                    type="number"
+                    name="quantity"
+                    value={form.quantity}
+                    onChange={handleChange}
+                    required
+                    min={1}
+                    placeholder="cth: 10"
+                    style={{ ...inputStyle }}
+                  />
                 </div>
-                <div className="col-6">
-                  <label className="form-label">Satuan <span className="text-danger">*</span></label>
-                  <input type="text" name="quantity_unit" className="form-control input-green"
-                    value={form.quantity_unit} onChange={handleChange} required
-                    placeholder="cth: porsi, kg, bungkus" />
+                <div>
+                  <Label required>Satuan</Label>
+                  <input
+                    className="input-green"
+                    type="text"
+                    name="quantity_unit"
+                    value={form.quantity_unit}
+                    onChange={handleChange}
+                    required
+                    placeholder="porsi, kg, bungkus"
+                    style={{ ...inputStyle }}
+                  />
                 </div>
               </div>
 
-              <div className="row g-3 mb-3">
-                <div className="col-6">
-                  <label className="form-label">Halal?</label>
-                  <select name="is_halal" className="form-select input-green"
-                    value={form.is_halal} onChange={handleChange}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 12,
+                  marginBottom: 14,
+                }}
+              >
+                <div>
+                  <Label>Halal?</Label>
+                  <select
+                    className="input-green"
+                    name="is_halal"
+                    value={form.is_halal}
+                    onChange={handleChange}
+                    style={{ ...inputStyle }}
+                  >
                     <option value="">Tidak Tahu</option>
                     <option value="true">✅ Halal</option>
                     <option value="false">❌ Tidak Berlabel Halal</option>
                   </select>
                 </div>
-                <div className="col-6">
-                  <label className="form-label">Expired / Batas Ambil <span className="text-danger">*</span></label>
-                  <input type="datetime-local" name="expired_at" className="form-control input-green"
-                    value={form.expired_at} onChange={handleChange} required />
+                <div>
+                  <Label required>Batas Waktu Ambil</Label>
+                  <input
+                    className="input-green"
+                    type="datetime-local"
+                    name="expired_at"
+                    value={form.expired_at}
+                    onChange={handleChange}
+                    required
+                    style={{ ...inputStyle }}
+                  />
                 </div>
               </div>
 
-              <div className="mb-3">
-                <label className="form-label">Catatan Alergen</label>
-                <input type="text" name="allergen_notes" className="form-control input-green"
-                  value={form.allergen_notes} onChange={handleChange}
-                  placeholder="cth: mengandung kacang, seafood, dll" />
-              </div>
-
-              <hr />
-
-              <h6 className="fw-bold mb-3">📍 Lokasi Pickup</h6>
-
-              <div className="mb-3">
-                <label className="form-label">Alamat Lengkap <span className="text-danger">*</span></label>
-                <input type="text" name="pickup_address" className="form-control input-green"
-                  value={form.pickup_address} onChange={handleChange} required
-                  placeholder="cth: Jl. Sudirman No. 123" />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">Kota <span className="text-danger">*</span></label>
-                <input type="text" name="pickup_city" className="form-control input-green"
-                  value={form.pickup_city} onChange={handleChange} required
-                  placeholder="cth: Medan" />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">
-                  Lokasi Pickup di Peta <span className="text-danger">*</span>
-                </label>
-                <MapPicker
-                  lat={coords.lat}
-                  lng={coords.lng}
-                  onChange={(pos) => setCoords(pos)}
-                  onAddress={(result) => {
-                    setForm(prev => ({
-                      ...prev,
-                      pickup_address: result.address_line || prev.pickup_address,
-                      pickup_city: result.city || prev.pickup_city,
-                    }));
-                  }}
-                  searchQuery={form.pickup_address}
+              <div>
+                <Label>Catatan Alergen</Label>
+                <input
+                  className="input-green"
+                  type="text"
+                  name="allergen_notes"
+                  value={form.allergen_notes}
+                  onChange={handleChange}
+                  placeholder="cth: mengandung kacang, seafood..."
+                  style={{ ...inputStyle }}
                 />
-                <small className="mt-1 d-block">
-                  📍 Koordinat: {coords.lat.toFixed(6)}, {coords.lng.toFixed(6)}
+              </div>
+            </div>
+
+            {/* ── Lokasi Pickup ── */}
+            <div
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: 16,
+                padding: "20px",
+                boxShadow: "var(--shadow)",
+              }}
+            >
+              <SectionTitle icon="bi-geo-alt" title="Lokasi Pickup" />
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "2fr 1fr",
+                  gap: 12,
+                  marginBottom: 14,
+                }}
+              >
+                <div>
+                  <Label required>Alamat Lengkap</Label>
+                  <input
+                    className="input-green"
+                    type="text"
+                    name="pickup_address"
+                    value={form.pickup_address}
+                    onChange={handleChange}
+                    required
+                    placeholder="cth: Jl. Sudirman No. 123"
+                    style={{ ...inputStyle }}
+                  />
+                </div>
+                <div>
+                  <Label required>Kota</Label>
+                  <input
+                    className="input-green"
+                    type="text"
+                    name="pickup_city"
+                    value={form.pickup_city}
+                    onChange={handleChange}
+                    required
+                    placeholder="cth: Medan"
+                    style={{ ...inputStyle }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: 14 }}>
+                <Label>Tandai Lokasi di Peta</Label>
+                <div
+                  style={{
+                    borderRadius: 12,
+                    overflow: "hidden",
+                    border: "1px solid var(--border)",
+                    marginBottom: 8,
+                  }}
+                >
+                  <MapPicker
+                    lat={coords.lat}
+                    lng={coords.lng}
+                    onChange={(pos) => setCoords(pos)}
+                    onAddress={(result) => {
+                      setForm((prev) => ({
+                        ...prev,
+                        pickup_address:
+                          result.address_line || prev.pickup_address,
+                        pickup_city: result.city || prev.pickup_city,
+                      }));
+                    }}
+                    searchQuery={form.pickup_address}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 7,
+                    background: "var(--g5)",
+                    border: "1px solid var(--border)",
+                    borderRadius: 8,
+                    padding: "5px 12px",
+                  }}
+                >
+                  <i
+                    className="bi bi-geo"
+                    style={{ color: "var(--g2)", fontSize: 12 }}
+                  />
+                  <small
+                    style={{
+                      fontSize: 11,
+                      color: "var(--txt3)",
+                      fontFamily: "monospace",
+                    }}
+                  >
+                    {coords.lat.toFixed(6)}, {coords.lng.toFixed(6)}
+                  </small>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 12,
+                  marginBottom: 14,
+                }}
+              >
+                <div>
+                  <Label>Jam Mulai Pickup</Label>
+                  <input
+                    className="input-green"
+                    type="time"
+                    name="pickup_start_time"
+                    value={form.pickup_start_time}
+                    onChange={handleChange}
+                    style={{ ...inputStyle }}
+                  />
+                </div>
+                <div>
+                  <Label>Jam Selesai Pickup</Label>
+                  <input
+                    className="input-green"
+                    type="time"
+                    name="pickup_end_time"
+                    value={form.pickup_end_time}
+                    onChange={handleChange}
+                    style={{ ...inputStyle }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label>Catatan Pickup</Label>
+                <textarea
+                  className="input-green"
+                  name="pickup_notes"
+                  rows={2}
+                  value={form.pickup_notes}
+                  onChange={handleChange}
+                  placeholder="cth: Hubungi dulu sebelum datang, parkir di depan"
+                  style={{ ...inputStyle, resize: "vertical" }}
+                />
+              </div>
+            </div>
+
+            {/* ── Foto ── */}
+            <div
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: 16,
+                padding: "20px",
+                boxShadow: "var(--shadow)",
+              }}
+            >
+              <SectionTitle icon="bi-images" title="Foto Donasi (Maks. 5)" />
+
+              <label
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "28px 20px",
+                  borderRadius: 12,
+                  cursor: "pointer",
+                  border: "2px dashed var(--border)",
+                  background: "var(--g5)",
+                  transition: "border-color 0.2s",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.borderColor = "var(--g2)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.borderColor = "var(--border)")
+                }
+              >
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handlePhotoChange}
+                  style={{ display: "none" }}
+                />
+                <i
+                  className="bi bi-cloud-upload"
+                  style={{
+                    fontSize: 28,
+                    color: "var(--txt4)",
+                    marginBottom: 8,
+                  }}
+                />
+                <p
+                  style={{
+                    fontSize: 13,
+                    color: "var(--txt3)",
+                    margin: 0,
+                    fontWeight: 600,
+                  }}
+                >
+                  Klik untuk upload foto
+                </p>
+                <small
+                  style={{ fontSize: 11, color: "var(--txt4)", marginTop: 4 }}
+                >
+                  JPG, PNG · Maks 5MB per foto · Maks 5 foto
                 </small>
-              </div>
+              </label>
 
-              <div className="row g-3 mb-3">
-                <div className="col-6">
-                  <label className="form-label">Jam Mulai Pickup</label>
-                  <input type="time" name="pickup_start_time" className="form-control input-green"
-                    value={form.pickup_start_time} onChange={handleChange} />
+              {photos.length > 0 && (
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 10,
+                    marginTop: 14,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {photos.map((p, i) => (
+                    <div key={i} style={{ position: "relative" }}>
+                      <img
+                        src={URL.createObjectURL(p)}
+                        alt={`preview-${i}`}
+                        style={{
+                          width: 90,
+                          height: 90,
+                          objectFit: "cover",
+                          borderRadius: 10,
+                          border: "1px solid var(--border)",
+                          display: "block",
+                        }}
+                      />
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: 5,
+                          left: 5,
+                          background: "rgba(11,21,9,0.7)",
+                          borderRadius: 20,
+                          padding: "1px 7px",
+                          fontSize: 9,
+                          color: "#fff",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {i + 1}/{photos.length}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="col-6">
-                  <label className="form-label">Jam Selesai Pickup</label>
-                  <input type="time" name="pickup_end_time" className="form-control input-green"
-                    value={form.pickup_end_time} onChange={handleChange} />
-                </div>
-              </div>
+              )}
+            </div>
 
-              <div className="mb-3">
-                <label className="form-label">Catatan Pickup</label>
-                <textarea name="pickup_notes" className="form-control input-green" rows={2}
-                  value={form.pickup_notes} onChange={handleChange}
-                  placeholder="cth: Hubungi dulu sebelum datang, parkir di depan" />
-              </div>
-
-              <hr />
-
-              <h6 className="fw-bold mb-3">📷 Foto (Maks. 5)</h6>
-              <div className="mb-4">
-                <input type="file" className="form-control input-green" accept="image/*"
-                  multiple onChange={handlePhotoChange} />
-                <small className="text-muted">Format: JPG, PNG. Maks 5MB per foto.</small>
-                {photos.length > 0 && (
-                  <div className="d-flex gap-2 mt-2 flex-wrap">
-                    {photos.map((p, i) => (
-                      <img key={i} src={URL.createObjectURL(p)} alt={`preview-${i}`}
-                        className="rounded" style={{ width: 80, height: 80, objectFit: 'cover' }} />
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <button type="submit" className="btn btn-green-gradient w-100" disabled={loading}>
-                {loading ? (
-                  <><span className="spinner-border spinner-border-sm me-2"></span>Menyimpan...</>
-                ) : (
-                  <><i className="bi bi-plus-circle me-1"></i>Buat Donasi</>
-                )}
-              </button>
-            </form>
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-green-gradient"
+              style={{
+                border: "none",
+                borderRadius: 12,
+                padding: "14px 0",
+                fontSize: 14,
+                fontWeight: 700,
+                cursor: loading ? "not-allowed" : "pointer",
+                fontFamily: "inherit",
+                opacity: loading ? 0.75 : 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 10,
+              }}
+            >
+              {loading ? (
+                <>
+                  <div
+                    className="spinner-border spinner-border-sm"
+                    style={{ width: 16, height: 16, borderWidth: 2 }}
+                  />{" "}
+                  Menyimpan...
+                </>
+              ) : (
+                <>
+                  <i className="bi bi-check2-circle" style={{ fontSize: 18 }} />{" "}
+                  Buat Donasi
+                </>
+              )}
+            </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

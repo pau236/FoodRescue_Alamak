@@ -1,16 +1,23 @@
 import React from "react";
 import { Link } from "react-router";
 import { withRouter } from "../Wrapper/withRouter";
+import api from "../utils/api";
 
 const navLinks = [
   { to: "/home", icon: "bi-house", label: "Beranda", auth: false },
   { to: "/donations", icon: "bi-box-seam", label: "Donasi", auth: false },
   { to: "/history", icon: "bi-clock-history", label: "Riwayat", auth: true },
-  { to: "/messages", icon: "bi-chat-dots", label: "Pesan", auth: true },
+  {
+    to: "/messages",
+    icon: "bi-chat-dots",
+    label: "Pesan",
+    auth: true,
+    badgeKey: "messages",
+  },
   { to: "/community", icon: "bi-people", label: "Komunitas", auth: true },
 ];
 
-const NavLink = ({ to, icon, label, location }) => {
+const NavLink = ({ to, icon, label, location, badge }) => {
   const isActive = location?.pathname === to;
   return (
     <Link
@@ -40,7 +47,38 @@ const NavLink = ({ to, icon, label, location }) => {
           e.currentTarget.querySelector(".nav-underline").style.width = "0%";
       }}
     >
-      <i className={`bi ${icon}`} style={{ fontSize: 18, flexShrink: 0 }} />
+      {/* Icon wrapper with badge */}
+      <span
+        style={{ position: "relative", display: "inline-flex", flexShrink: 0 }}
+      >
+        <i className={`bi ${icon}`} style={{ fontSize: 18 }} />
+        {badge > 0 && (
+          <span
+            style={{
+              position: "absolute",
+              top: -5,
+              left: -5,
+              minWidth: 16,
+              height: 16,
+              borderRadius: 999,
+              background: "#e05050",
+              color: "#fff",
+              fontSize: 9,
+              fontWeight: 700,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "0 4px",
+              lineHeight: 1,
+              border: "1.5px solid var(--surface)",
+              boxShadow: "0 1px 4px rgba(224,80,80,0.4)",
+              fontFamily: "inherit",
+            }}
+          >
+            {badge > 99 ? "99+" : badge}
+          </span>
+        )}
+      </span>
       <span className="d-none d-xl-inline">{label}</span>
       <span
         className="nav-underline"
@@ -65,7 +103,9 @@ class NavBar extends React.Component {
     this.state = {
       theme: document.documentElement.getAttribute("data-theme"),
       menuOpen: false,
+      unreadMessages: 0,
     };
+    this.pollInterval = null;
   }
 
   setTheme = () => {
@@ -75,11 +115,49 @@ class NavBar extends React.Component {
     this.setState({ theme: newTheme });
   };
 
+  fetchUnread = async () => {
+    try {
+      const res = await api.get("/conversations");
+      const { user } = this.props.auth;
+      const userId = user?.id || user?._id;
+      const total = res.data.reduce((sum, conv) => {
+        const isProvider =
+          conv.provider_id?._id === userId || conv.provider_id === userId;
+        return (
+          sum +
+          (isProvider ? conv.provider_unread || 0 : conv.seeker_unread || 0)
+        );
+      }, 0);
+      this.setState({ unreadMessages: total });
+    } catch {}
+  };
+
   componentDidMount() {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
       document.documentElement.setAttribute("data-theme", savedTheme);
     }
+    if (this.props.auth?.user) {
+      this.fetchUnread();
+      this.pollInterval = setInterval(this.fetchUnread, 15000);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const wasLoggedIn = !!prevProps.auth?.user;
+    const isLoggedIn = !!this.props.auth?.user;
+    if (!wasLoggedIn && isLoggedIn) {
+      this.fetchUnread();
+      this.pollInterval = setInterval(this.fetchUnread, 15000);
+    }
+    if (wasLoggedIn && !isLoggedIn) {
+      clearInterval(this.pollInterval);
+      this.setState({ unreadMessages: 0 });
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.pollInterval);
   }
 
   render() {
@@ -87,7 +165,7 @@ class NavBar extends React.Component {
     const isProvider = user?.role === "food_provider";
     const isAdmin = user?.role === "admin";
     const location = this.props.location;
-    const { menuOpen } = this.state;
+    const { menuOpen, unreadMessages } = this.state;
 
     const allLinks = [
       ...navLinks.filter((l) => !l.auth || user),
@@ -104,6 +182,11 @@ class NavBar extends React.Component {
         ? [{ to: "/admin", icon: "bi-shield-check", label: "Admin" }]
         : []),
     ];
+
+    const getBadge = (link) => {
+      if (link.badgeKey === "messages") return unreadMessages;
+      return 0;
+    };
 
     return (
       <nav
@@ -176,6 +259,7 @@ class NavBar extends React.Component {
                 icon={link.icon}
                 label={link.label}
                 location={location}
+                badge={getBadge(link)}
               />
             ))}
           </div>

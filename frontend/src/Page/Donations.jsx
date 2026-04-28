@@ -191,22 +191,23 @@ function Donations() {
             justifyContent: "space-between",
           }}
         >
-          <div>
-            <p
+          <div className="d-flex align-items-center gap-2">
+            <i
+              className="bi bi-box-seam"
               style={{
-                fontSize: 10,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "var(--g2)",
-                fontWeight: 700,
-                marginBottom: 4,
+                fontSize: 35,
+                color: "var(--g1)",
+                lineHeight: 1,
               }}
-            >
-              ◈ FOOD RESCUE NETWORK
-            </p>
+            />
+
             <h4
               className="syne-h1 mb-0"
-              style={{ color: "var(--txt)", fontSize: 22 }}
+              style={{
+                color: "var(--txt)",
+                fontSize: 22,
+                lineHeight: 1,
+              }}
             >
               Jelajahi Donasi
             </h4>
@@ -473,598 +474,598 @@ function Donations() {
               height: "calc(100vh - 116px)",
               overflowY: "auto",
               overflowX: "hidden",
-              padding: "16px 16px 16px 12px",
+              padding: "0",
+              background: "var(--bg)",
             }}
           >
-            {/* Filter Card */}
+            {/* Sticky filter wrapper — full width solid bg so cards can't bleed through */}
             <div
               style={{
-                background: "var(--surface)",
-                border: "1px solid var(--border)",
-                borderRadius: 16,
-                padding: "18px 20px",
-                marginBottom: 14,
-                boxShadow: "var(--shadow)",
+                position: "sticky",
+                top: 0,
+                zIndex: 20,
+                background: "var(--bg)",
+                padding: "16px 16px 10px 12px",
               }}
             >
+              {/* Filter Card */}
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  marginBottom: 14,
-                }}
-              >
-                <i
-                  className="bi bi-sliders"
-                  style={{ color: "var(--g2)", fontSize: 14 }}
-                />
-                <span
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: "var(--txt3)",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Filter Pencarian
-                </span>
-                {hasActiveFilter && (
-                  <button
-                    onClick={() =>
-                      setFilter({
-                        category: "",
-                        city: "",
-                        search: "",
-                        halal: "",
-                        pickup_start: "",
-                        pickup_end: "",
-                      })
-                    }
-                    style={{
-                      marginLeft: "auto",
-                      background: "rgba(224,80,80,0.1)",
-                      border: "1px solid rgba(224,80,80,0.25)",
-                      color: "#e05050",
-                      borderRadius: 8,
-                      padding: "3px 10px",
-                      fontSize: 11,
-                      cursor: "pointer",
-                      fontFamily: "inherit",
-                    }}
-                  >
-                    <i className="bi bi-x me-1" />
-                    Reset
-                  </button>
-                )}
-              </div>
-
-              {/* Search */}
-              <div style={{ position: "relative", marginBottom: 10 }}>
-                <i
-                  className="bi bi-search"
-                  style={{
-                    position: "absolute",
-                    left: 12,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: "var(--txt4)",
-                    fontSize: 13,
-                    pointerEvents: "none",
-                  }}
-                />
-                <input
-                  className="input-green"
-                  placeholder="Cari donasi makanan..."
-                  value={filter.search}
-                  onChange={(e) =>
-                    setFilter({ ...filter, search: e.target.value })
-                  }
-                  style={{
-                    width: "100%",
-                    paddingLeft: 36,
-                    paddingRight: 14,
-                    paddingTop: 9,
-                    paddingBottom: 9,
-                    borderRadius: 10,
-                    border: "1px solid var(--border)",
-                    fontSize: 13,
-                    fontFamily: "inherit",
-                    background: "var(--g5)",
-                    outline: "none",
-                    boxSizing: "border-box",
-                  }}
-                />
-              </div>
-
-              {/* Row 2 */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 10,
-                  marginBottom: 10,
-                }}
-              >
-                <select
-                  className="input-green"
-                  value={filter.category}
-                  onChange={(e) =>
-                    setFilter({ ...filter, category: e.target.value })
-                  }
-                  style={{
-                    borderRadius: 10,
-                    border: "1px solid var(--border)",
-                    padding: "8px 12px",
-                    fontSize: 13,
-                    fontFamily: "inherit",
-                    background: "var(--g5)",
-                  }}
-                >
-                  <option value="">🏷️ Semua Kategori</option>
-                  {categories.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.icon_emoji} {c.name}
-                    </option>
-                  ))}
-                </select>
-                <div style={{ position: "relative" }}>
-                  <i
-                    className="bi bi-geo"
-                    style={{
-                      position: "absolute",
-                      left: 12,
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      color: "var(--txt4)",
-                      fontSize: 13,
-                      pointerEvents: "none",
-                    }}
-                  />
-                  <input
-                    className="input-green"
-                    placeholder="Kota..."
-                    value={filter.city}
-                    onChange={(e) =>
-                      setFilter({ ...filter, city: e.target.value })
-                    }
-                    style={{
-                      width: "100%",
-                      paddingLeft: 34,
-                      paddingRight: 12,
-                      paddingTop: 8,
-                      paddingBottom: 8,
-                      borderRadius: 10,
-                      border: "1px solid var(--border)",
-                      fontSize: 13,
-                      fontFamily: "inherit",
-                      background: "var(--g5)",
-                      boxSizing: "border-box",
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Row 3 */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 10,
-                }}
-              >
-                <select
-                  className="input-green"
-                  value={filter.halal}
-                  onChange={(e) =>
-                    setFilter({ ...filter, halal: e.target.value })
-                  }
-                  style={{
-                    borderRadius: 10,
-                    border: "1px solid var(--border)",
-                    padding: "8px 12px",
-                    fontSize: 13,
-                    fontFamily: "inherit",
-                    background: "var(--g5)",
-                  }}
-                >
-                  <option value="">🍽️ Semua</option>
-                  <option value="true">✅ Halal</option>
-                  <option value="false">❌ Non Halal</option>
-                </select>
-                <div>
-                  <label
-                    style={{
-                      fontSize: 10,
-                      color: "var(--txt4)",
-                      letterSpacing: "0.05em",
-                      marginBottom: 4,
-                      display: "block",
-                    }}
-                  >
-                    ⏰ Buka Sampai
-                  </label>
-                  <input
-                    type="time"
-                    className="input-green"
-                    value={filter.pickup_end}
-                    onChange={(e) =>
-                      setFilter({ ...filter, pickup_end: e.target.value })
-                    }
-                    style={{
-                      width: "100%",
-                      borderRadius: 10,
-                      border: "1px solid var(--border)",
-                      padding: "7px 12px",
-                      fontSize: 13,
-                      fontFamily: "inherit",
-                      background: "var(--g5)",
-                      boxSizing: "border-box",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Results */}
-            {loading ? (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "60px 0",
-                  gap: 16,
-                }}
-              >
-                <div
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 14,
-                    background: "rgba(95,139,76,0.1)",
-                    border: "1px solid rgba(95,139,76,0.25)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <div
-                    className="spinner-border spinner-border-sm"
-                    style={{ color: "var(--g2)" }}
-                  />
-                </div>
-                <p style={{ color: "var(--txt4)", fontSize: 13, margin: 0 }}>
-                  Memuat donasi...
-                </p>
-              </div>
-            ) : filteredDonations.length === 0 ? (
-              <div
-                style={{
-                  textAlign: "center",
-                  padding: "60px 24px",
                   background: "var(--surface)",
                   border: "1px solid var(--border)",
                   borderRadius: 16,
+                  padding: "12px 14px",
+                  boxShadow: "var(--shadow2)",
                 }}
               >
+                {/* Header row */}
                 <div
                   style={{
-                    width: 64,
-                    height: 64,
-                    borderRadius: 18,
-                    margin: "0 auto 16px",
-                    background: "rgba(95,139,76,0.08)",
-                    border: "1px solid var(--border)",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 28,
+                    gap: 8,
+                    marginBottom: 10,
                   }}
                 >
-                  🧺
-                </div>
-                <p
-                  className="syne-h1"
-                  style={{ color: "var(--txt)", fontSize: 16, marginBottom: 8 }}
-                >
-                  Tidak ada donasi
-                </p>
-                <p style={{ color: "var(--txt4)", fontSize: 13 }}>
-                  Coba ubah filter atau perluas radius pencarian
-                </p>
-              </div>
-            ) : (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 12,
-                }}
-              >
-                {filteredDonations.map((d) => {
-                  const dist =
-                    userPos &&
-                    d.pickup_location?.coordinates &&
-                    !(d.pickup_location.coordinates[0] === 0)
-                      ? getDistance(
-                          userPos.lat,
-                          userPos.lng,
-                          d.pickup_location.coordinates[1],
-                          d.pickup_location.coordinates[0],
-                        ).toFixed(1)
-                      : null;
-
-                  return (
-                    <div
-                      key={d._id}
+                  <i
+                    className="bi bi-sliders"
+                    style={{ color: "var(--g2)", fontSize: 13 }}
+                  />
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: "var(--txt3)",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Filter Pencarian
+                  </span>
+                  {hasActiveFilter && (
+                    <button
+                      onClick={() =>
+                        setFilter({
+                          category: "",
+                          city: "",
+                          search: "",
+                          halal: "",
+                          pickup_start: "",
+                          pickup_end: "",
+                        })
+                      }
                       style={{
-                        background: "var(--surface)",
-                        border: "1px solid var(--border)",
-                        borderRadius: 16,
-                        overflow: "hidden",
-                        display: "flex",
-                        flexDirection: "column",
-                        boxShadow: "var(--shadow)",
-                        transition: "border-color 0.2s, box-shadow 0.2s",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = "var(--g3)";
-                        e.currentTarget.style.boxShadow = "var(--shadow2)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.borderColor = "var(--border)";
-                        e.currentTarget.style.boxShadow = "var(--shadow)";
+                        marginLeft: "auto",
+                        background: "rgba(224,80,80,0.1)",
+                        border: "1px solid rgba(224,80,80,0.25)",
+                        color: "#e05050",
+                        borderRadius: 8,
+                        padding: "2px 10px",
+                        fontSize: 11,
+                        cursor: "pointer",
+                        fontFamily: "inherit",
                       }}
                     >
-                      {/* Image */}
-                      <div style={{ position: "relative" }}>
-                        {d.photos?.length > 0 ? (
-                          <img
-                            src={`/uploads/${d.photos[0].photo_url}`}
-                            alt={d.title}
-                            style={{
-                              width: "100%",
-                              height: 130,
-                              objectFit: "cover",
-                              display: "block",
-                            }}
-                          />
-                        ) : (
-                          <div
-                            style={{
-                              height: 130,
-                              background: "var(--surf2)",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                          >
-                            <i
-                              className="bi bi-image"
-                              style={{ fontSize: 32, color: "var(--txt4)" }}
-                            />
-                          </div>
-                        )}
-                        {/* Status badge on image */}
-                        <div style={{ position: "absolute", top: 8, right: 8 }}>
-                          {getStatusBadge(d.status)}
-                        </div>
-                        {/* Distance badge */}
-                        {dist && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              bottom: 8,
-                              left: 8,
-                              background: "rgba(11,21,9,0.8)",
-                              backdropFilter: "blur(4px)",
-                              border: "1px solid rgba(95,139,76,0.3)",
-                              borderRadius: 20,
-                              padding: "3px 10px",
-                              color: "var(--g2)",
-                              fontSize: 10,
-                              fontWeight: 700,
-                            }}
-                          >
-                            <i className="bi bi-geo me-1" />
-                            {dist} km
-                          </div>
-                        )}
-                      </div>
+                      <i className="bi bi-x me-1" />
+                      Reset
+                    </button>
+                  )}
+                </div>
 
-                      {/* Body */}
+                {/* All filters in one uniform grid */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "2fr 1fr 1fr 1fr",
+                    gap: 8,
+                  }}
+                >
+                  {/* Search */}
+                  <div style={{ position: "relative" }}>
+                    <i
+                      className="bi bi-search"
+                      style={{
+                        position: "absolute",
+                        left: 10,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "var(--txt4)",
+                        fontSize: 12,
+                        pointerEvents: "none",
+                      }}
+                    />
+                    <input
+                      className="input-green"
+                      placeholder="Cari donasi..."
+                      value={filter.search}
+                      onChange={(e) =>
+                        setFilter({ ...filter, search: e.target.value })
+                      }
+                      style={{
+                        width: "100%",
+                        height: 36,
+                        paddingLeft: 30,
+                        paddingRight: 10,
+                        borderRadius: 8,
+                        border: "1px solid var(--border)",
+                        fontSize: 12,
+                        fontFamily: "inherit",
+                        background: "var(--g5)",
+                        outline: "none",
+                        boxSizing: "border-box",
+                      }}
+                    />
+                  </div>
+
+                  {/* Kategori */}
+                  <select
+                    className="input-green"
+                    value={filter.category}
+                    onChange={(e) =>
+                      setFilter({ ...filter, category: e.target.value })
+                    }
+                    style={{
+                      height: 36,
+                      borderRadius: 8,
+                      border: "1px solid var(--border)",
+                      padding: "0 8px",
+                      fontSize: 12,
+                      fontFamily: "inherit",
+                      background: "var(--g5)",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <option value="">🏷️ Kategori</option>
+                    {categories.map((c) => (
+                      <option key={c._id} value={c._id}>
+                        {c.icon_emoji} {c.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* Halal */}
+                  <select
+                    className="input-green"
+                    value={filter.halal}
+                    onChange={(e) =>
+                      setFilter({ ...filter, halal: e.target.value })
+                    }
+                    style={{
+                      height: 36,
+                      borderRadius: 8,
+                      border: "1px solid var(--border)",
+                      padding: "0 8px",
+                      fontSize: 12,
+                      fontFamily: "inherit",
+                      background: "var(--g5)",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <option value="">🍽️ Semua</option>
+                    <option value="true">✅ Halal</option>
+                    <option value="false">❌ Non-Halal</option>
+                  </select>
+
+                  {/* Kota */}
+                  <div style={{ position: "relative" }}>
+                    <i
+                      className="bi bi-geo"
+                      style={{
+                        position: "absolute",
+                        left: 10,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "var(--txt4)",
+                        fontSize: 12,
+                        pointerEvents: "none",
+                      }}
+                    />
+                    <input
+                      className="input-green"
+                      placeholder="Kota"
+                      value={filter.city}
+                      onChange={(e) =>
+                        setFilter({ ...filter, city: e.target.value })
+                      }
+                      style={{
+                        width: "100%",
+                        height: 36,
+                        paddingLeft: 28,
+                        paddingRight: 8,
+                        borderRadius: 8,
+                        border: "1px solid var(--border)",
+                        fontSize: 12,
+                        fontFamily: "inherit",
+                        background: "var(--g5)",
+                        boxSizing: "border-box",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* end sticky wrapper */}
+
+            {/* Results */}
+            <div style={{ padding: "0 16px 16px 12px" }}>
+              {loading ? (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "60px 0",
+                    gap: 16,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 14,
+                      background: "rgba(95,139,76,0.1)",
+                      border: "1px solid rgba(95,139,76,0.25)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div
+                      className="spinner-border spinner-border-sm"
+                      style={{ color: "var(--g2)" }}
+                    />
+                  </div>
+                  <p style={{ color: "var(--txt4)", fontSize: 13, margin: 0 }}>
+                    Memuat donasi...
+                  </p>
+                </div>
+              ) : filteredDonations.length === 0 ? (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: 300,
+                    background: "var(--surface)",
+                    border: "1px solid var(--border)",
+                    borderRadius: 16,
+                    padding: "40px 24px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 64,
+                      height: 64,
+                      borderRadius: 18,
+                      margin: "0 auto 16px",
+                      background: "rgba(95,139,76,0.08)",
+                      border: "1px solid var(--border)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: 28,
+                    }}
+                  >
+                    🧺
+                  </div>
+                  <p
+                    className="syne-h1"
+                    style={{
+                      color: "var(--txt)",
+                      fontSize: 16,
+                      marginBottom: 8,
+                    }}
+                  >
+                    Tidak ada donasi
+                  </p>
+                  <p style={{ color: "var(--txt4)", fontSize: 13 }}>
+                    Coba ubah filter atau perluas radius pencarian
+                  </p>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gap: 10,
+                  }}
+                >
+                  {filteredDonations.map((d) => {
+                    const dist =
+                      userPos &&
+                      d.pickup_location?.coordinates &&
+                      !(d.pickup_location.coordinates[0] === 0)
+                        ? getDistance(
+                            userPos.lat,
+                            userPos.lng,
+                            d.pickup_location.coordinates[1],
+                            d.pickup_location.coordinates[0],
+                          ).toFixed(1)
+                        : null;
+
+                    return (
                       <div
+                        key={d._id}
                         style={{
-                          padding: "12px 14px",
-                          flex: 1,
+                          background: "var(--surface)",
+                          border: "1px solid var(--border)",
+                          borderRadius: 16,
+                          overflow: "hidden",
                           display: "flex",
                           flexDirection: "column",
+                          boxShadow: "var(--shadow)",
+                          transition: "border-color 0.2s, box-shadow 0.2s",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor = "var(--g3)";
+                          e.currentTarget.style.boxShadow = "var(--shadow2)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = "var(--border)";
+                          e.currentTarget.style.boxShadow = "var(--shadow)";
                         }}
                       >
-                        <h6
-                          className="syne-h1"
-                          style={{
-                            fontSize: 13,
-                            color: "var(--txt)",
-                            marginBottom: 8,
-                            lineHeight: 1.3,
-                          }}
-                        >
-                          {d.title}
-                        </h6>
-
-                        {/* Tags */}
-                        <div
-                          style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: 4,
-                            marginBottom: 10,
-                          }}
-                        >
-                          {d.category_id && (
-                            <span
+                        {/* Image */}
+                        <div style={{ position: "relative" }}>
+                          {d.photos?.length > 0 ? (
+                            <img
+                              src={`/uploads/${d.photos[0].photo_url}`}
+                              alt={d.title}
                               style={{
-                                background: "var(--g5)",
-                                color: "var(--txt3)",
-                                border: "1px solid var(--border)",
-                                borderRadius: 20,
-                                fontSize: 10,
-                                padding: "2px 8px",
-                                fontWeight: 600,
+                                width: "100%",
+                                height: 100,
+                                objectFit: "cover",
+                                display: "block",
+                              }}
+                            />
+                          ) : (
+                            <div
+                              style={{
+                                height: 100,
+                                background: "var(--surf2)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
                               }}
                             >
-                              {d.category_id.icon_emoji} {d.category_id.name}
-                            </span>
+                              <i
+                                className="bi bi-image"
+                                style={{ fontSize: 24, color: "var(--txt4)" }}
+                              />
+                            </div>
                           )}
-                          {d.is_halal && (
-                            <span
+                          {/* Status badge on image */}
+                          <div
+                            style={{ position: "absolute", top: 6, right: 6 }}
+                          >
+                            {getStatusBadge(d.status)}
+                          </div>
+                          {/* Distance badge */}
+                          {dist && (
+                            <div
                               style={{
-                                background: "rgba(95,139,76,0.1)",
-                                color: "var(--g2)",
-                                border: "1px solid rgba(95,139,76,0.25)",
+                                position: "absolute",
+                                bottom: 6,
+                                left: 6,
+                                background: "rgba(11,21,9,0.8)",
+                                backdropFilter: "blur(4px)",
+                                border: "1px solid rgba(95,139,76,0.3)",
                                 borderRadius: 20,
-                                fontSize: 10,
                                 padding: "2px 8px",
-                                fontWeight: 600,
+                                color: "var(--g2)",
+                                fontSize: 10,
+                                fontWeight: 700,
                               }}
                             >
-                              ✅ Halal
-                            </span>
+                              <i className="bi bi-geo me-1" />
+                              {dist} km
+                            </div>
                           )}
                         </div>
 
-                        {/* Info rows */}
-                        <div style={{ flex: 1 }}>
+                        {/* Body */}
+                        <div
+                          style={{
+                            padding: "10px 12px",
+                            flex: 1,
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <h6
+                            className="syne-h1"
+                            style={{
+                              fontSize: 12,
+                              color: "var(--txt)",
+                              marginBottom: 6,
+                              lineHeight: 1.3,
+                            }}
+                          >
+                            {d.title}
+                          </h6>
+
+                          {/* Tags */}
                           <div
                             style={{
                               display: "flex",
-                              alignItems: "center",
-                              gap: 6,
-                              marginBottom: 5,
+                              flexWrap: "wrap",
+                              gap: 3,
+                              marginBottom: 8,
                             }}
                           >
-                            <i
-                              className="bi bi-box"
-                              style={{
-                                color: "var(--txt4)",
-                                fontSize: 11,
-                                width: 14,
-                              }}
-                            />
-                            <span
-                              style={{ fontSize: 12, color: "var(--txt3)" }}
-                            >
-                              {d.quantity_remaining}/{d.quantity}{" "}
-                              {d.quantity_unit}
-                            </span>
+                            {d.category_id && (
+                              <span
+                                style={{
+                                  background: "var(--g5)",
+                                  color: "var(--txt3)",
+                                  border: "1px solid var(--border)",
+                                  borderRadius: 20,
+                                  fontSize: 10,
+                                  padding: "2px 8px",
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {d.category_id.icon_emoji} {d.category_id.name}
+                              </span>
+                            )}
+                            {d.is_halal && (
+                              <span
+                                style={{
+                                  background: "rgba(95,139,76,0.1)",
+                                  color: "var(--g2)",
+                                  border: "1px solid rgba(95,139,76,0.25)",
+                                  borderRadius: 20,
+                                  fontSize: 10,
+                                  padding: "2px 8px",
+                                  fontWeight: 600,
+                                }}
+                              >
+                                ✅ Halal
+                              </span>
+                            )}
                           </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 6,
-                              marginBottom: 5,
-                            }}
-                          >
-                            <i
-                              className="bi bi-geo-alt"
-                              style={{
-                                color: "var(--txt4)",
-                                fontSize: 11,
-                                width: 14,
-                              }}
-                            />
-                            <span
-                              style={{ fontSize: 12, color: "var(--txt3)" }}
-                            >
-                              {d.pickup_city}
-                            </span>
-                          </div>
-                          {d.pickup_start_time && (
+
+                          {/* Info rows */}
+                          <div style={{ flex: 1 }}>
                             <div
                               style={{
                                 display: "flex",
                                 alignItems: "center",
-                                gap: 6,
-                                marginBottom: 5,
+                                gap: 5,
+                                marginBottom: 4,
                               }}
                             >
                               <i
-                                className="bi bi-clock"
+                                className="bi bi-box"
                                 style={{
                                   color: "var(--txt4)",
-                                  fontSize: 11,
-                                  width: 14,
+                                  fontSize: 10,
+                                  width: 12,
                                 }}
                               />
                               <span
-                                style={{ fontSize: 12, color: "var(--txt3)" }}
+                                style={{ fontSize: 11, color: "var(--txt3)" }}
                               >
-                                {d.pickup_start_time} – {d.pickup_end_time}
+                                {d.quantity_remaining}/{d.quantity}{" "}
+                                {d.quantity_unit}
                               </span>
                             </div>
-                          )}
-                          <div
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                                marginBottom: 4,
+                              }}
+                            >
+                              <i
+                                className="bi bi-geo-alt"
+                                style={{
+                                  color: "var(--txt4)",
+                                  fontSize: 10,
+                                  width: 12,
+                                }}
+                              />
+                              <span
+                                style={{ fontSize: 11, color: "var(--txt3)" }}
+                              >
+                                {d.pickup_city}
+                              </span>
+                            </div>
+                            {d.pickup_start_time && (
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 5,
+                                  marginBottom: 4,
+                                }}
+                              >
+                                <i
+                                  className="bi bi-clock"
+                                  style={{
+                                    color: "var(--txt4)",
+                                    fontSize: 10,
+                                    width: 12,
+                                  }}
+                                />
+                                <span
+                                  style={{ fontSize: 11, color: "var(--txt3)" }}
+                                >
+                                  {d.pickup_start_time} – {d.pickup_end_time}
+                                </span>
+                              </div>
+                            )}
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                                marginBottom: 10,
+                              }}
+                            >
+                              <i
+                                className="bi bi-person"
+                                style={{
+                                  color: "var(--txt4)",
+                                  fontSize: 10,
+                                  width: 12,
+                                }}
+                              />
+                              <span
+                                style={{
+                                  fontSize: 11,
+                                  color: "var(--txt3)",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                  maxWidth: 80,
+                                }}
+                              >
+                                {d.provider_id?.first_name}{" "}
+                                {d.provider_id?.last_name}
+                              </span>
+                              <span
+                                style={{
+                                  fontSize: 11,
+                                  color: "#e8b84b",
+                                  marginLeft: "auto",
+                                  flexShrink: 0,
+                                }}
+                              >
+                                ★{" "}
+                                {d.provider_id?.trust_score?.toFixed(1) ||
+                                  "5.0"}
+                              </span>
+                            </div>
+                          </div>
+
+                          <Link
+                            to={`/donations/${d._id}`}
+                            className="btn-green-gradient"
                             style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 6,
-                              marginBottom: 12,
+                              display: "block",
+                              textAlign: "center",
+                              textDecoration: "none",
+                              borderRadius: 8,
+                              padding: "6px 0",
+                              fontSize: 11,
+                              fontWeight: 600,
+                              fontFamily: "inherit",
                             }}
                           >
-                            <i
-                              className="bi bi-person"
-                              style={{
-                                color: "var(--txt4)",
-                                fontSize: 11,
-                                width: 14,
-                              }}
-                            />
-                            <span
-                              style={{ fontSize: 12, color: "var(--txt3)" }}
-                            >
-                              {d.provider_id?.first_name}{" "}
-                              {d.provider_id?.last_name}
-                            </span>
-                            <span
-                              style={{
-                                fontSize: 12,
-                                color: "#e8b84b",
-                                marginLeft: "auto",
-                              }}
-                            >
-                              ★{" "}
-                              {d.provider_id?.trust_score?.toFixed(1) || "5.0"}
-                            </span>
-                          </div>
+                            Detail →
+                          </Link>
                         </div>
-
-                        <Link
-                          to={`/donations/${d._id}`}
-                          className="btn-green-gradient"
-                          style={{
-                            display: "block",
-                            textAlign: "center",
-                            textDecoration: "none",
-                            borderRadius: 10,
-                            padding: "8px 0",
-                            fontSize: 12,
-                            fontWeight: 600,
-                            fontFamily: "inherit",
-                          }}
-                        >
-                          Lihat Detail →
-                        </Link>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            {/* end results wrapper */}
           </div>
         </div>
       </div>
