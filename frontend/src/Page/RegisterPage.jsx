@@ -1,5 +1,6 @@
 import React from "react";
 import api from "../utils/api";
+import { Link } from "react-router-dom";
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -442,12 +443,13 @@ class RegisterPage extends React.Component {
               <h3 className="syne-h1 text-green1">Buat Akun Baru</h3>
               <p className="outfit fw-light text-green3">
                 Sudah punya akun?{" "}
-                <span
-                  className="login-link"
-                  onClick={() => (window.location.href = "/login")}
+                <Link
+                  to="/login"
+                  className="outfit fw-semibold text-green3 login-link"
+                  style={{ textDecoration: "none" }}
                 >
                   Masuk di sini
-                </span>
+                </Link>
               </p>
             </div>
             {this.state.apiError && (

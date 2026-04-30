@@ -1,6 +1,7 @@
 import React from "react";
 import api from "../utils/api";
-import { Navigate } from "react-router";
+import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 
 class SignInPage extends React.Component {
@@ -193,12 +194,12 @@ class SignInPage extends React.Component {
               <h3 className="syne-h1 text-green1">Masuk ke Akun</h3>
               <p className="outfit fw-light text-green3">
                 Belum punya akun?{" "}
-                <span
-                  className="login-link"
-                  onClick={() => (window.location.href = "/register")}
+                <Link
+                  to="/register"
+                  className="outfit fw-semibold text-green3 login-link"
                 >
                   Buat Gratis
-                </span>
+                </Link>
               </p>
             </div>
 
@@ -240,6 +241,9 @@ class SignInPage extends React.Component {
                     value={this.state.password}
                     onChange={this.handlePasswordChange}
                     onBlur={this.handlePasswordBlur}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") this.handleSubmit();
+                    }}
                   />
                   <i
                     className={`bi ${this.state.showPassword ? "bi-eye-slash" : "bi-eye"} eye-inside`}
@@ -278,12 +282,12 @@ class SignInPage extends React.Component {
                     Ingat saya
                   </label>
                 </div>
-                <p
+                <Link
+                  to="/forgot-password"
                   className="outfit fw-semibold text-green3 login-link"
-                  onClick={() => (window.location.href = "/forgot-password")}
                 >
                   Lupa Password?
-                </p>
+                </Link>
               </div>
 
               <button

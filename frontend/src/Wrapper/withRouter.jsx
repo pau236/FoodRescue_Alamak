@@ -1,4 +1,4 @@
-import { useNavigate, useLocation, useParams } from "react-router";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 
 export function withRouter(Component) {

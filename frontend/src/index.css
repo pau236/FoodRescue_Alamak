@@ -163,10 +163,11 @@ code {
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-decoration: none !important
 }
 
 .login-link:hover {
-  text-decoration: underline;
+  text-decoration: underline !important
 }
 
 .back-btn {
