@@ -267,6 +267,9 @@ function ToastNotification() {
       addToast(data.title, data.body, data.type);
     };
 
+    socket.off("new_message_notify", handleNewMessageNotify);
+    socket.off("push_notification", handlePushNotif);
+
     socket.on("new_message_notify", handleNewMessageNotify);
     socket.on("push_notification", handlePushNotif);
 
