@@ -317,7 +317,6 @@ class NavBar extends React.Component {
                   border: "1px solid var(--border)",
                   background: "var(--surf2)",
                   transition: "all 0.2s",
-                  maxWidth: 160,
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = "var(--g2)";
@@ -367,7 +366,7 @@ class NavBar extends React.Component {
                     fontSize: 14,
                     fontWeight: 600,
                     color: "var(--txt2)",
-                    maxWidth: 100,
+                    maxWidth: 220,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
@@ -389,7 +388,7 @@ class NavBar extends React.Component {
                             {badge.emoji}
                           </span>
                         )}
-                        {user.first_name}
+                        {user.first_name} {user.last_name}
                       </span>
                     );
                   })()}
@@ -573,7 +572,7 @@ class NavBar extends React.Component {
                             {badge.emoji}
                           </span>
                         )}
-                        {user.first_name}
+                        {user.first_name} {user.last_name}
                       </span>
                     );
                   })()}

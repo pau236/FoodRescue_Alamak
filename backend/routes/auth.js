@@ -470,7 +470,7 @@ router.post("/login", async (req, res) => {
       });
     if (!user.password_hash)
       return res.status(400).json({
-        msg: "Akun ini menggunakan login Google. Silakan login dengan Google.",
+        msg: "Akun ini terdaftar via Google. Kamu bisa tetap login pakai Google, atau klik 'Lupa Password' untuk membuat password dan login manual juga.",
       });
 
     const isMatch = await user.comparePassword(password);
